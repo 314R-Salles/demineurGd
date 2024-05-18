@@ -11,6 +11,8 @@ extends Node2D
 	set(v): 
 		revealed= v;
 
+signal onclick
+
 func _to_string():
 	return  "pos :" + str(pos) +  " bomb :" + str(isBomb)
 
@@ -21,11 +23,24 @@ func setLabel(neighboors):
 	label.scale = Vector2(2,2)
 	#label.add_theme_font_size_override("overrideName", 32)
 	label.position = Vector2(18,12)
+	
+func setPicture():
+	var sprite = Sprite2D.new();
+	sprite.texture = preload("res://assets/icon.svg")
+	add_child(sprite)
+	sprite.scale = Vector2(0.5,0.5)
+	sprite.position = Vector2(32,32)
 
-signal onclick
+	
+func removeButton() :
+	if (texture_button!= null ):
+		texture_button.queue_free()
+
+func disableButton():
+	if (texture_button!= null ):
+		texture_button.disabled = true
 
 func _on_texture_button_pressed():
 	revealed = true;
 	onclick.emit(self)
-	texture_button.queue_free()
 	
