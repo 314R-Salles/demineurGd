@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://cjsekowm1kdxr"]
+
+[ext_resource type="Texture2D" uid="uid://c100hx6vvbmrh" path="res://assets/gris.png" id="1_h407s"]
+[ext_resource type="Script" path="res://scripts/case.gd" id="1_o615u"]
+[ext_resource type="Texture2D" uid="uid://dv3u8xxtv4hqh" path="res://assets/vert.png" id="2_8k6v2"]
+[ext_resource type="Texture2D" uid="uid://cdt7s2h4arn6c" path="res://assets/grisf.png" id="3_pog3b"]
+
+[node name="case" type="Node2D"]
+script = ExtResource("1_o615u")
+
+[node name="TextureButton" type="TextureButton" parent="."]
+offset_right = 64.0
+offset_bottom = 64.0
+texture_normal = ExtResource("1_h407s")
+texture_pressed = ExtResource("2_8k6v2")
+texture_hover = ExtResource("3_pog3b")
+stretch_mode = 0
+
+[connection signal="onclick" from="." to="." method="_on_onclick"]
+[connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]
