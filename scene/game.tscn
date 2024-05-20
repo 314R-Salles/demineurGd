@@ -1,34 +1,114 @@
-[gd_scene load_steps=3 format=3 uid="uid://bbyjfrr3pro64"]
+[gd_scene load_steps=4 format=3 uid="uid://bbyjfrr3pro64"]
 
 [ext_resource type="Script" path="res://scripts/GameManager.gd" id="1_7skut"]
-[ext_resource type="PackedScene" uid="uid://ierjj6q4gwaj" path="res://scene/game_manager.tscn" id="1_rh6g5"]
+[ext_resource type="Shader" path="res://electric.gdshader" id="2_o6cjo"]
 
-[node name="Game" type="Node2D"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t1ner"]
+resource_local_to_scene = true
+shader = ExtResource("2_o6cjo")
+shader_parameter/background_color = Vector4(0, 0, 0, 1)
+shader_parameter/line_color = Vector4(0, 1, 1, 1)
+shader_parameter/line_freq = 9.56
+shader_parameter/height = 0.6
+shader_parameter/speed = 0.8
+shader_parameter/scale = Vector2(1, 30)
+
+[node name="Game" type="Node"]
 script = ExtResource("1_7skut")
 
-[node name="GameManager" parent="." instance=ExtResource("1_rh6g5")]
+[node name="interface" type="Control" parent="."]
+material = SubResource("ShaderMaterial_t1ner")
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="interface"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -272.0
+offset_top = -52.0
+offset_right = -24.0
+offset_bottom = 48.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 40
+
+[node name="instructionLabel" type="Label" parent="interface/VBoxContainer"]
 unique_name_in_owner = true
-
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_right = 840.0
-offset_bottom = 512.0
-color = Color(0.607843, 0.854902, 0.94902, 1)
-metadata/_edit_lock_ = true
-
-[node name="Restart" type="Button" parent="."]
-unique_name_in_owner = true
-offset_left = 580.0
-offset_top = 408.0
-offset_right = 740.0
-offset_bottom = 456.0
-text = "Restart"
-
-[node name="instructionLabel" type="Label" parent="."]
-offset_left = 576.0
-offset_top = 104.0
-offset_right = 792.0
-offset_bottom = 127.0
+layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.559209, 0.673191, 1)
 text = "Nombre de mines"
+horizontal_alignment = 2
+vertical_alignment = 2
 
-[connection signal="pressed" from="Restart" to="." method="_on_restart_pressed"]
+[node name="Restart" type="Button" parent="interface/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Restart"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="interface/VBoxContainer"]
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+
+[node name="WidthSetting" type="VBoxContainer" parent="interface/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="WidthLabel" type="Label" parent="interface/VBoxContainer/HBoxContainer/WidthSetting"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Width : X "
+
+[node name="WidthSlider" type="HSlider" parent="interface/VBoxContainer/HBoxContainer/WidthSetting"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 8.0
+max_value = 12.0
+value = 8.0
+tick_count = 1
+ticks_on_borders = true
+
+[node name="HeightSetting" type="VBoxContainer" parent="interface/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="HeightLabel" type="Label" parent="interface/VBoxContainer/HBoxContainer/HeightSetting"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Height : X "
+
+[node name="heightSlider" type="HSlider" parent="interface/VBoxContainer/HBoxContainer/HeightSetting"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 8.0
+max_value = 12.0
+value = 8.0
+tick_count = 1
+ticks_on_borders = true
+
+[node name="MineThresholdSetting" type="VBoxContainer" parent="interface/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ThresholdLabel" type="Label" parent="interface/VBoxContainer/MineThresholdSetting"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Mines : a few  "
+
+[node name="ThresholdSlider" type="HSlider" parent="interface/VBoxContainer/MineThresholdSetting"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 4.0
+tick_count = 1
+ticks_on_borders = true
+
+[connection signal="pressed" from="interface/VBoxContainer/Restart" to="." method="_on_restart_pressed"]
+[connection signal="value_changed" from="interface/VBoxContainer/HBoxContainer/WidthSetting/WidthSlider" to="." method="_on_width_slider_value_changed"]
+[connection signal="value_changed" from="interface/VBoxContainer/HBoxContainer/HeightSetting/heightSlider" to="." method="_on_height_slider_value_changed"]
+[connection signal="value_changed" from="interface/VBoxContainer/MineThresholdSetting/ThresholdSlider" to="." method="_on_thresholdt_slider_value_changed"]
