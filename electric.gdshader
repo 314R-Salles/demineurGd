@@ -1,6 +1,12 @@
+/*
+	動的電子背景シェーダー by あるる（きのもと 結衣） @arlez80
+	Procedural Electric Background Shader by Yui Kinomoto @arlez80
+
+	MIT License
+*/
 shader_type canvas_item;
 
-uniform vec4 background_color  = vec4( 0.0, 0.0, 0.0, 1.0 );
+uniform vec4 background_color = vec4( 0.0, 0.0, 0.0, 1.0 );
 uniform vec4 line_color = vec4( 0.0, 1.0, 1.0, 1.0 );
 uniform float line_freq = 9.56;
 uniform float height = 0.6;

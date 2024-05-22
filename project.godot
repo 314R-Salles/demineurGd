@@ -23,6 +23,7 @@ Settings="*res://scene/settings.tscn"
 
 window/size/viewport_width=812
 window/size/viewport_height=512
+window/size/resizable=false
 window/stretch/aspect="expand"
 
 [input]

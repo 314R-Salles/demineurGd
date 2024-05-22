@@ -16,6 +16,8 @@ extends Node
 @onready var threshold_label = %ThresholdLabel
 @onready var threshold_slider = %ThresholdSlider
 
+# on accède à un seul des 2 colorRect pour modifier le shader commun. 
+@onready var color_rect : ColorRect = %ColorRect
 
 var totalMines = 0
 var totalTiles = 0
@@ -24,7 +26,9 @@ var all_tiles = [];
 
 var defaultTile =  preload("res://scene/case.tscn");
 
+
 func _ready():
+	color_rect.get_material().set_shader_parameter("line_color", Vector4( 0.0, 1.0, 1.0, 1.0 ))
 	width_slider.value = Settings.width_tiles
 	height_slider.value = Settings.height_tiles
 
@@ -36,7 +40,7 @@ func _ready():
 
 # on ne manipule les var définies via @export que dans le ready, sinon utilise valeur par défaut
 	totalTiles = Settings.width_tiles * Settings.height_tiles
-	print(totalTiles)
+
 # Le +1 pour des offsets / le 300 pour l'UI à droite
 	DisplayServer.window_set_size(Vector2i((Settings.width_tiles+1)*64+300, (Settings.height_tiles+1)*64))
 	randomize();
@@ -62,6 +66,7 @@ func on_click(tile):
 		totalTiles-=1
 		if totalTiles - totalMines == 0:
 			instruction_label.text = "C'est gagné"
+			color_rect.get_material().set_shader_parameter("line_color", Vector4( 0.0, 1.0, 0.0, 1.0 ))
 			for i in range(1, Settings.width_tiles+1):
 				for j in range(1, Settings.height_tiles+1):
 					all_tiles[i][j].disableButton()
@@ -73,6 +78,7 @@ func on_click(tile):
 	else:
 		tile.setPicture()
 		instruction_label.text = "C'est perdu"
+		color_rect.get_material().set_shader_parameter("line_color", Vector4( 1.0, 0.0, 0.0, 1.0 ))
 		for r in range(1,2*max(Settings.width_tiles, Settings.height_tiles)):
 			await get_tree().create_timer(0.05).timeout
 			for i in range(-r,r):
@@ -147,7 +153,6 @@ func _on_height_slider_value_changed(value):
 
 
 func setSliderLabel(type, value):
-	print(str(value))
 	var res = type + " : "
 	if type == "Mines":
 		match value:
@@ -169,29 +174,8 @@ func setSliderLabel(type, value):
 
 
 func _on_thresholdt_slider_value_changed(value):
-	print(value)
-	match value:
-		0.:
-			Settings.mine_threshold = 0.90
-		1.:
-			Settings.mine_threshold = 0.85
-		2.:
-			Settings.mine_threshold = 0.80
-		3.:
-			Settings.mine_threshold = 0.75
-		4.:
-			Settings.mine_threshold = 0.70
+	Settings.mine_threshold = 0.90 - value * 0.05
 	threshold_label.text = setSliderLabel("Mines", Settings.mine_threshold)
 
 func threshold_to_slider(value):
-	match value:
-		0.90:
-			return 0
-		0.85:
-			return 1
-		0.80:
-			return 2
-		0.75:
-			return 3
-		0.70:
-			return 4
+	return (0.90-value)/0.05
